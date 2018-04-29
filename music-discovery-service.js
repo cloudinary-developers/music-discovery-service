@@ -7,7 +7,7 @@ const Webtask    = require('webtask-tools');
 const bodyParser = require('body-parser');
 const request = require('request');
 const JSONP = require('node-jsonp');
-var Algorithmia = require('algorithmia');
+const Algorithmia = require('algorithmia');
 
 
 
