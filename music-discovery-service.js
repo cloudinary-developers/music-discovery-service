@@ -1,21 +1,32 @@
-/*
-Music Discovery Service 
-*/
 const cloudinary = require('cloudinary');
-const express    = require('express');
-const Webtask    = require('webtask-tools');
+const express = require('express');
+const Webtask = require('webtask-tools');
 const bodyParser = require('body-parser');
 const request = require('request');
 const JSONP = require('node-jsonp');
 const Algorithmia = require('algorithmia');
-
-
+const Api7digital = require('7digital-api');
+const axios = require('axios');
+const md5 = require('md5');
 
 var app = express();
 
-var algorithmia_key, musicmatch_api_key, api, artists, tracks, releases , consumerkey, consumersecret;
+var algorithmia_key,rovi_metasearch_api_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret;
 
 app.use(bodyParser.json());
+
+
+//Rovi Signature Utility 
+function genRoviSig(context) {
+    var apikey = context.secrets.rovi_metasearch_api_key;
+    var secret = context.secrets.rovi_metasearch_api_secret;
+    console.log(apikey,secret);
+    rovi_metasearch_api_key = apikey;
+    var curdate = new Date();
+    var gmtstring = curdate.toGMTString();
+    var utc = Date.parse(gmtstring) / 1000;
+    return  md5(apikey + secret + utc);
+}
 
 // Our Middleware to setup API 
 var apiContext = function (req, res, next) {
@@ -29,8 +40,14 @@ var apiContext = function (req, res, next) {
     });
 
   // paging 
-  const page = context.data.page || 1;
-  const pageSize = context.data.pageSize || 100;
+  const page = context.query.page || 1;
+  const pageSize = context.query.pageSize || 100;
+  
+  //roviSignature 
+  roviSignature = genRoviSig(context);
+  // console.log('Rovi Sig: ',roviSignature);
+  // console.log('Rovi rovi_metasearch_api_key: ',rovi_metasearch_api_key);
+  
   
   //Algorithmia key
   algorithmia_key = context.secrets.algorithmia_key;
@@ -42,8 +59,8 @@ var apiContext = function (req, res, next) {
   // 7digital-api
   consumerkey = context.secrets.oauth_consumer_key;
   consumersecret =  context.secrets.oauth_consumer_secret;
-  
-  api = require('7digital-api').configure({
+
+  api = Api7digital.configure({
 	  format: 'JSON',
 	  consumerkey: context.secrets.oauth_consumer_key,
 	  consumersecret: context.secrets.oauth_consumer_secret,
@@ -69,6 +86,107 @@ var apiContext = function (req, res, next) {
 // Use our API Middleware
 app.use(apiContext)
 
+
+
+
+async function getMetaSeq(params){
+try{
+ 
+   let songInfoURL = "http://api.rovicorp.com/data/v1.1/song/info"
+   let songInfoOptions = {
+          validateStatus: function (status) { return status < 500;},
+          params: {
+            isrcid: params.isrc,
+            include:"moods,themes,review,appearances",
+            country:"us",
+            language:"en",
+            format:"json",
+            apikey: rovi_metasearch_api_key,
+            sig:roviSignature
+            }};
+            
+             
+    let meta = await axios.get(songInfoURL, songInfoOptions)
+  // console.log(meta.data.song);
+  //Mandatory field: amgpopid or album or amgclassicalid or albumid.
+  let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
+  let albumInfoOptions = {
+          validateStatus: function (status) { return status < 500;},
+          params: {
+            album: meta.data.song.appearances[0].ids.albumId,
+            include:"moods,themes,images,primaryreview,styles,themes,credits",
+            country:"us",
+            language:"en",
+            format:"json",
+            apikey: rovi_metasearch_api_key,
+            sig:roviSignature
+            }};
+
+
+             
+    let album = await axios.get(albumInfoURL, albumInfoOptions)
+    console.log(album.data.album);
+    
+    let nameid = ( meta.data.song) ? meta.data.song.primaryArtists[0].id : null;
+  
+          let artistInfoURL = "http://api.rovicorp.com/data/v1.1/name/info"
+          let artistInfoOptions = {
+             validateStatus: function (status) { return status < 500;},
+                  params: {
+                    nameid: nameid,
+                    include:"images",
+                    country:"us",
+                    language:"en",
+                    formatid:"62",
+                    format:"json",
+                    apikey: rovi_metasearch_api_key,
+                    sig:roviSignature
+                    }};
+       
+      
+      
+  let artist = await axios.get(artistInfoURL, artistInfoOptions)
+  
+  //console.log(artist.data.name);
+  
+  // convenience kv
+  //song
+  var moods = ( meta.data.song && meta.data.song.moods) ? meta.data.song.moods.map((value) => value.name):null;
+  var themes = (meta.data.song && meta.data.song.themes) ? meta.data.song.themes.map((value) => value.name):null;
+  var genres = (meta.data.song && meta.data.song.genres) ? meta.data.song.genres.map((value) => value.name):null;
+  //artist
+  var active = (meta.data.name && artist.data.name.active) ? artist.data.name.active: null;
+  var images = (meta.data.name && artist.data.name.images) ? artist.data.name.images: null;
+            
+  var result = {images:images, isrc:params.isrc,active:active, genres:genres, themes: themes, moods: moods, song:meta.data.song, artist: artist.data.name, album:album.data.album}
+            //  console.log(result);
+              return await result;
+  }
+  catch (error){
+    console.log(error); 
+    return await error;
+  }      
+}
+
+app.get('/meta/:isrc', function (req, res) {
+  var isrc = req.params.isrc  || 'USBN29801012'; 
+  const context = req.webtaskContext;
+
+  const data = { isrc: isrc };
+  getMetaSeq(data)
+  .then(function(meta){
+       console.log('success')
+        res.send(meta);
+  })
+  .catch(function(error){
+          console.log('error')
+          res.send(error);
+          //res.sendStatus(error) 
+  });
+});
+
+
+/*end */
 
 var getLyrics = function(params){
   
@@ -146,6 +264,10 @@ var oauth = new api.OAuth();
 
 // /song/70540913/stream/
 
+/*
+https://canadian-music-week.cloudinary.auth0-extend.com/music-discovery-service/song/40349901/stream
+*/
+
 app.get('/song/:trackid/?:stream', function ( req, res) {
   
   const trackid = req.params.trackid  || '123456';  // /song/12345
@@ -185,9 +307,15 @@ var getClip = function(trackid){
 }
  
  // /song/70540913/stream/
+ 
+ /*
+  "id": "40349901",
+        "title": "First Time",
+        https://canadian-music-week.cloudinary.auth0-extend.com/music-discovery-service/clip/40349901/stream
+ */
 
  app.get('/clip/:trackid/?:stream', function ( req, res) {
-  var trackid = req.params.trackid || '12345';   // /clip/12345
+  var trackid = req.params.trackid || '40349901';   // /clip/12345
   const context = req.webtaskContext;
   const shouldStream = req.params.stream  || "url";
   
@@ -200,7 +328,7 @@ var getClip = function(trackid){
       }
    })
    .catch(function(err){
-      console.log('ERR:', Err);
+      console.log('ERR:', err);
       res.send(err);
    })
   
@@ -248,6 +376,7 @@ app.get('/browse/:letter', function ( req, res) {
   })
 }
   
+// Neil Diamond  35
 app.get('/search/:query', function ( req, res) {
   const query = req.params.query || 1;
   search(query).then(function(data){
@@ -261,6 +390,9 @@ app.get('/search/:query', function ( req, res) {
   
   
   //14643 The Breeders
+  // ZEDD 819457
+  // Album clarity 1960305
+  // track hourglass 21258162
 
 var getReleases = function(artistID) {  
   return new Promise(function (resolve, reject) {
@@ -278,6 +410,7 @@ var getReleases = function(artistID) {
   })
 }
     
+// artistid     
 app.get('/releases/:artistid', function ( req, res) {
 const artistid = req.params.artistid || '14643';
   getReleases(artistid)
@@ -362,6 +495,8 @@ return  new Promise(function (resolve, reject) {
 
 
 // Get tracks by releaseID: 
+// "id": "3885814",
+//        "title": "Melody Road",
 var getTracks = function(releaseid) {  
   return new Promise(function (resolve, reject) {
         releases.getTracks({ releaseid: releaseid }, function(err, data) {
@@ -380,7 +515,9 @@ var getTracks = function(releaseid) {
 
 
 
-// Get tracks by releaseID: 7456808
+// Get tracks by releaseID: 7026306
+// /releases/819457  // ZEDD
+//1960305 //clarity
 app.get('/tracks/:releaseid', function ( req, res ) {
   
   const releaseid = req.params.releaseid || '7026306';
@@ -389,7 +526,6 @@ app.get('/tracks/:releaseid', function ( req, res ) {
     .then(function(data){
       console.log(JSON.stringify(data,null,5));
       res.send(data); 
-      
     }).catch(function(error){
        res.send(error);
     });
@@ -397,11 +533,56 @@ app.get('/tracks/:releaseid', function ( req, res ) {
 });
 
 
+var iterateTracks = function(data) {  
+  var tracks = data.tracks.track;
+  return new Promise(function (resolve, reject) {
+    let rs = tracks.map(function(track){
+        return track.isrc;
+     });
+      resolve(rs);
+  })
+}    
+
+var updateTracks = function(isrc) {  
+  return new Promise(function (resolve, reject) {
+  const data = { isrc: isrc };
+  getMetaSeq(data)
+  .then(function(meta){
+       console.log('success')
+        resolve(meta);
+  })
+  .catch(function(error){
+          console.log('error')
+          reject(error);
+  });
+  })
+}
+
+app.get('/test/:releaseid', function ( req, res ) {
+  const releaseid = req.params.releaseid || '7026306';
+    console.log(releaseid);
+    getTracks(releaseid)
+    .then (function(data){
+        return iterateTracks(data);
+    })
+     .then(function(data){
+     console.log(JSON.stringify(data,null,5));
+        res.send(data); 
+    }).catch(function(error){
+       res.send(error);
+    });
+    
+  
+});
+
+
+
 
 
 app.get('/', function (req, res) {
-  const html = `<a href="https://cloudinary.gitbook.io/canadian-music-week-hackathon-guide">Hackathon Guide<a>`;
+  const html = `<a href="https://bit.ly/cmw18-guide">Hackathon Guide<a>`;
     res.send(html); 
+  // res.sendStatus(200);
 });
 
 
