@@ -33,12 +33,7 @@ function genRoviSig(context) {
 var apiContext = function (req, res, next) {
   const context = req.webtaskContext;
 
-  // config cloudinary  
-  cloudinary.config({
-      "cloud_name": context.secrets.cloudinary_cloud_name,
-      "api_key": context.secrets.cloudinary_api_key,
-      "api_secret": context.secrets.cloudinary_api_secret
-    });
+
 
 var cmg_cloudEnv = context.secrets.cmg_cloud;
 
@@ -54,6 +49,13 @@ let cmg_secret = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[1];
     });
 
 
+
+  // config cloudinary  
+  cloudinary.config({
+      "cloud_name": context.secrets.cloudinary_cloud_name,
+      "api_key": context.secrets.cloudinary_api_key,
+      "api_secret": context.secrets.cloudinary_api_secret
+    });
   // paging 
   const page = context.query.page || 1;
   const pageSize = context.query.pageSize || 100;
