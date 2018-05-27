@@ -48,7 +48,7 @@ let cmg_secret = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[1];
 
  // config CMG cloudinary  
   cmg_archives.config({
-      "cloud_name": cmg_cloud,
+      "cloud_name": cmgcloud,
       "api_key": cmg_api,
       "api_secret": cmg_secret
     });
