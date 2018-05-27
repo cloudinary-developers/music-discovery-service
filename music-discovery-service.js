@@ -606,45 +606,6 @@ var getArchivesByTag = function(tag) {
   })
 }
 
-590
-591
-592
-593
-594
-595
-596
-597
-598
-599
-600
-601
-602
-603
-604
-605
-606
-607
-608
-609
-610
-  
-});
-var getArchivesByTag = function(tag) {  
-  return new Promise(function (resolve, reject) {
-        cloudinary.v2.api.resources_by_tag(tag, function(error, result){
-            if(error){
-                reject(error);
-            }
-            
-            if(result){
-                  console.log(result);
-                  resolve(result);
-            }
-        });
-  })
-}
-
-
 
 
 app.get('/archives/:tag', function ( req, res ) {
