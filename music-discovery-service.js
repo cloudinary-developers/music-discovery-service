@@ -593,10 +593,16 @@ app.get('/test/:releaseid', function ( req, res ) {
 
 var getArchivesByTag = function(tag) {  
   return new Promise(function (resolve, reject) {
-  
-        //resolve(meta);
-          //reject(error);
- 
+        cmg_archives.v2.api.tags(function(error, result){
+            if(error){
+                reject(error);
+            }
+            
+            if(result){
+                  console.log(result);
+                  resolve(result);
+            }
+        });
   })
 }
 
