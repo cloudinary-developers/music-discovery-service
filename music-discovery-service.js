@@ -591,6 +591,31 @@ app.get('/test/:releaseid', function ( req, res ) {
 });
 
 
+var getArchivesByTag = function(tag) {  
+  return new Promise(function (resolve, reject) {
+  
+        //resolve(meta);
+          //reject(error);
+ 
+  })
+}
+
+
+
+app.get('/archives/:tag', function ( req, res ) {
+  const tag = req.params.tag || 'cover-image';
+    console.log(releaseid);
+    getArchivesByTag(tag)
+     .then(function(data){
+     console.log(JSON.stringify(data,null,5));
+        res.send(data); 
+    }).catch(function(error){
+       res.send(error);
+    });
+    
+  
+});
+
 
 
 
