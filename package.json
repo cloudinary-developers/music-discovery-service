@@ -1,0 +1,25 @@
+{
+  "name": "admin-extend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "music-discovery-service.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "7digital-api": "^0.37.0",
+    "algorithmia": "^0.3.10",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "cloudinary": "^1.11.0",
+    "express": "^4.16.3",
+    "md5": "^2.2.1",
+    "musicmatch": "^0.3.2",
+    "node-jsonp": "^1.0.2",
+    "parse-filepath": "^1.0.2",
+    "request": "^2.87.0",
+    "webtask-tools": "^3.2.1"
+  }
+}
