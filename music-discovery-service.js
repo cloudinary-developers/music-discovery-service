@@ -40,6 +40,7 @@ var apiContext = function (req, res, next) {
       "api_secret": context.secrets.cloudinary_api_secret
     });
 
+var cmg_cloudEnv = context.secrets.cmg_cloud;
 
 let cmgcloud = cmg_cloudEnv.split('@')[1];
 let cmg_api = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[0];
