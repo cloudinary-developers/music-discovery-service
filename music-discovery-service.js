@@ -40,7 +40,6 @@ var apiContext = function (req, res, next) {
       "api_secret": context.secrets.cloudinary_api_secret
     });
 
-var cmg_cloudEnv = "CLOUDINARY_URL=cloudinary://956419449971683:ePm6stXNKBBmXCx_w-6FLkh6Vdw@capitol-music-group";
 
 let cmgcloud = cmg_cloudEnv.split('@')[1];
 let cmg_api = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[0];
