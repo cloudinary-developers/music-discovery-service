@@ -597,20 +597,20 @@ app.get('/test/:releaseid', function ( req, res ) {
 
 
 
-function getSignedAsset = function(public_id,options){
+// function getSignedAsset = function(public_id,options){
  
-  cloudinary.config(cmgConfig);
-  var url  = cloudinary.image(public_id,
-  { type: 'image', sign_url: true,
-    transformation: [
-     { width: 200, crop: 'scale', effect: 'saturation:30' }
-    ] 
-  });
-  return url;
+//   cloudinary.config(cmgConfig);
+//   var url  = cloudinary.image(public_id,
+//   { type: 'image', sign_url: true,
+//     transformation: [
+//     { width: 200, crop: 'scale', effect: 'saturation:30' }
+//     ] 
+//   });
+//   return url;
   
-  // { overlay: "cloudinary_icon", opacity: 40, effect: 'brightness:200', 
-  //     width: 0.8, flags: 'relative' }
-}
+//   // { overlay: "cloudinary_icon", opacity: 40, effect: 'brightness:200', 
+//   //     width: 0.8, flags: 'relative' }
+// }
 
 var getArchivesByTag = function(tag) {  
   return new Promise(function (resolve, reject) {
