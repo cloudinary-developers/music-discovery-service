@@ -597,20 +597,20 @@ app.get('/test/:releaseid', function ( req, res ) {
 
 
 
-// function getSignedAsset = function(public_id,options){
- 
-//   cloudinary.config(cmgConfig);
-//   var url  = cloudinary.image(public_id,
-//   { type: 'image', sign_url: true,
-//     transformation: [
-//     { width: 200, crop: 'scale', effect: 'saturation:30' }
-//     ] 
-//   });
-//   return url;
+function getSignedAsset = function(public_id,options){
   
-//   // { overlay: "cloudinary_icon", opacity: 40, effect: 'brightness:200', 
-//   //     width: 0.8, flags: 'relative' }
-// }
+ return  cloudinary.image(
+  "http://upload.wikimedia.org/wikipedia/commons/4/44/Tulip_-_floriade_canberra.jpg",
+  { type: 'fetch', sign_url: true,
+    transformation: [
+     { width: 200, crop: 'scale', effect: 'saturation:30' }, 
+     { overlay: "cloudinary_icon", opacity: 40, effect: 'brightness:200', 
+       width: 0.8, flags: 'relative' }
+    ] 
+  });
+
+ 
+}
 
 var getArchivesByTag = function(tag) {  
   return new Promise(function (resolve, reject) {
@@ -622,8 +622,9 @@ var getArchivesByTag = function(tag) {
             
             if(result){
                   console.log(result);
+                  var imageURL = getSignedAsset('raw-pixel-stock/sax-painting',{});
                 //  var public_id = result.resources[0].public_id;
-                  
+                  var result.signedURL = imageURL;
                   resolve(result);
             }
         });
