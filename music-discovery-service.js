@@ -593,7 +593,7 @@ app.get('/test/:releaseid', function ( req, res ) {
 
 var getArchivesByTag = function(tag) {  
   return new Promise(function (resolve, reject) {
-        cmg_archives.v2.api.tags(function(error, result){
+        cloudinary.v2.api.tags(function(error, result){
             if(error){
                 reject(error);
             }
