@@ -626,7 +626,7 @@ var getArchivesByTag = function(tag) {
                   //var imageURL = getSignedAsset('raw-pixel-stock/sax-painting',{});
                 
                   //var result.signedURL = imageURL;
-                  resolve(result.resources[0].public_id);
+                  resolve(result);
             }
         });
   })
