@@ -11,7 +11,7 @@ const md5 = require('md5');
 
 var app = express();
 
-var algorithmia_key,rovi_metasearch_api_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret;
+var algorithmia_key,rovi_metasearch_api_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig, clConfig;
 
 app.use(bodyParser.json());
 
