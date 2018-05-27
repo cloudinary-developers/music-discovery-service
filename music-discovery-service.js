@@ -79,8 +79,8 @@ let cmg_secret = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[1];
 
   api = Api7digital.configure({
 	  format: 'JSON',
-	  consumerkey: context.secrets.seven_digital_oauth_consumer_key,
-	  consumersecret: context.secrets.seven_digital_oauth_consumer_secret,
+	  consumerkey: consumerkey,
+	  consumersecret: consumersecret,
 	  defaultParams: { 
 	      country: 'GB', 
         shopId: context.secrets.seven_digital_shop_id,
