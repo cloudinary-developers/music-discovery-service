@@ -622,10 +622,11 @@ var getArchivesByTag = function(tag) {
             
             if(result){
                   console.log(result);
-                  var imageURL = getSignedAsset('raw-pixel-stock/sax-painting',{});
-                //  var public_id = result.resources[0].public_id;
-                  var result.signedURL = imageURL;
-                  resolve(result);
+                   var public_id = result.resources[0].public_id;
+                  //var imageURL = getSignedAsset('raw-pixel-stock/sax-painting',{});
+                
+                  //var result.signedURL = imageURL;
+                  resolve(public_id);
             }
         });
   })
