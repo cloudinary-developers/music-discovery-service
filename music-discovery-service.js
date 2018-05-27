@@ -580,7 +580,7 @@ app.get('/test/:releaseid', function ( req, res ) {
 
 
 app.get('/', function (req, res) {
-  const html = `<a href="https://bit.ly/cmw18-guide">Hackathon Guide<a>`;
+  const html = `<a href="https://bit.ly/cil-guide">Hackathon Guide<a>`;
     res.send(html); 
   // res.sendStatus(200);
 });
