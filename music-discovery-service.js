@@ -41,20 +41,24 @@ let cmg_api = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[0];
 let cmg_secret = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[1];
 
  // config CMG cloudinary  
-  cmg_archives.config({
+  
+cmgConfig = {
       "cloud_name": cmgcloud,
       "api_key": cmg_api,
       "api_secret": cmg_secret
-    });
+    }
 
-
-
-  // config cloudinary  
-  cloudinary.config({
+clConfig = {
       "cloud_name": context.secrets.cloudinary_cloud_name,
       "api_key": context.secrets.cloudinary_api_key,
       "api_secret": context.secrets.cloudinary_api_secret
-    });
+    };
+    
+cloudinary.config(cmgConfig);
+cloudinary.config(clConfig);
+
+  // config cloudinary  
+  cloudinary.config();
   // paging 
   const page = context.query.page || 1;
   const pageSize = context.query.pageSize || 100;
