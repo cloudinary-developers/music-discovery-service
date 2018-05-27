@@ -1,5 +1,4 @@
 const cloudinary = require('cloudinary');
-const cmg_archives = require('cloudinary');
 const express = require('express');
 const Webtask = require('webtask-tools');
 const bodyParser = require('body-parser');
