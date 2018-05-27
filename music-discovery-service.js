@@ -32,7 +32,7 @@ function genRoviSig(context) {
 // Our Middleware to setup API 
 var apiContext = function (req, res, next) {
   const context = req.webtaskContext;
-  
+
   // config cloudinary  
   cloudinary.config({
       "cloud_name": context.secrets.cloudinary_cloud_name,
