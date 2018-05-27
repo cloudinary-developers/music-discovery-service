@@ -34,9 +34,9 @@ var apiContext = function (req, res, next) {
   
   // config cloudinary  
   cloudinary.config({
-      "cloud_name": context.secrets.cloud_name,
-      "api_key": context.secrets.api_key,
-      "api_secret": context.secrets.api_secret
+      "cloud_name": context.secrets.cloudinary_cloud_name,
+      "api_key": context.secrets.cloudinary_api_key,
+      "api_secret": context.secrets.cloudinary_api_secret
     });
 
   // paging 
@@ -57,16 +57,16 @@ var apiContext = function (req, res, next) {
   musicmatch_api_key = context.secrets.musicmatch_api_key;
   
   // 7digital-api
-  consumerkey = context.secrets.oauth_consumer_key;
-  consumersecret =  context.secrets.oauth_consumer_secret;
+  consumerkey = context.secrets.seven_digital_oauth_consumer_key;
+  consumersecret =  context.secrets.seven_digital_oauth_consumer_secret;
 
   api = Api7digital.configure({
 	  format: 'JSON',
-	  consumerkey: context.secrets.oauth_consumer_key,
-	  consumersecret: context.secrets.oauth_consumer_secret,
+	  consumerkey: context.secrets.seven_digital_oauth_consumer_key,
+	  consumersecret: context.secrets.seven_digital_oauth_consumer_secret,
 	  defaultParams: { 
 	      country: 'GB', 
-        shopId: context.secrets.shop_id,
+        shopId: context.secrets.seven_digital_shop_id,
 	      usageTypes: 'adsupportedstreaming',  
 	      pageSize: pageSize, 
 	      page:page, 
