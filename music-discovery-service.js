@@ -610,7 +610,7 @@ var getArchivesByTag = function(tag) {
 
 app.get('/archives/:tag', function ( req, res ) {
   const tag = req.params.tag || 'cover-image';
-    console.log(releaseid);
+    console.log(tag);
     getArchivesByTag(tag)
      .then(function(data){
      console.log(JSON.stringify(data,null,5));
