@@ -55,7 +55,7 @@ clConfig = {
     };
     
 cloudinary.config(cmgConfig);
-cloudinary.config(clConfig);
+//cloudinary.config(clConfig);
 
   // config cloudinary  
   cloudinary.config();
