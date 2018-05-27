@@ -598,9 +598,9 @@ app.get('/test/:releaseid', function ( req, res ) {
 
 
 function getSignedAsset = function(public_id,options){
+ 
   cloudinary.config(cmgConfig);
-  var url  = cloudinary.image(
-  public_id,
+  var url  = cloudinary.image(public_id,
   { type: 'image', sign_url: true,
     transformation: [
      { width: 200, crop: 'scale', effect: 'saturation:30' }
@@ -622,7 +622,7 @@ var getArchivesByTag = function(tag) {
             
             if(result){
                   console.log(result);
-                  var public_id = result.resources[0].public_id;
+                //  var public_id = result.resources[0].public_id;
                   
                   resolve(result);
             }
