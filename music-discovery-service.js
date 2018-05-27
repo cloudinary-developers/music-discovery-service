@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary');
+const cmg_archives = require('cloudinary');
 const express = require('express');
 const Webtask = require('webtask-tools');
 const bodyParser = require('body-parser');
@@ -38,6 +39,20 @@ var apiContext = function (req, res, next) {
       "api_key": context.secrets.cloudinary_api_key,
       "api_secret": context.secrets.cloudinary_api_secret
     });
+
+var cmg_cloudEnv = "CLOUDINARY_URL=cloudinary://956419449971683:ePm6stXNKBBmXCx_w-6FLkh6Vdw@capitol-music-group";
+
+let cmgcloud = cmg_cloudEnv.split('@')[1];
+let cmg_api = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[0];
+let cmg_secret = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[1];
+
+ // config CMG cloudinary  
+  cmg_archives.config({
+      "cloud_name": cmg_cloud,
+      "api_key": cmg_api,
+      "api_secret": cmg_secret
+    });
+
 
   // paging 
   const page = context.query.page || 1;
