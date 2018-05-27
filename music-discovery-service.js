@@ -597,7 +597,7 @@ app.get('/test/:releaseid', function ( req, res ) {
 
 
 
-var getSignedAsset = function(public_id,options){
+var getSignedAsset = function(){
   
  return  cloudinary.image(
   "http://upload.wikimedia.org/wikipedia/commons/4/44/Tulip_-_floriade_canberra.jpg",
