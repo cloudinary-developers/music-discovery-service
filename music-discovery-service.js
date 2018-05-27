@@ -616,7 +616,7 @@ app.get('/archives/:tag', function ( req, res ) {
     getArchivesByTag(tag)
      .then(function(data){
      console.log(JSON.stringify(data,null,5));
-        res.send(data); 
+        res.send(JSON.stringify(data,null,5)); 
     }).catch(function(error){
        res.send(error);
     });
