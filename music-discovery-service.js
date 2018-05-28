@@ -369,7 +369,6 @@ var browse = function(letter) {
                   if(!item.name.includes('/')){
                     return true
                   }
-                  
                 })
                // data.artists = filteredArtists;
                 resolve(data);
