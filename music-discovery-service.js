@@ -365,8 +365,13 @@ var browse = function(letter) {
               if(data){
                 
                 var artists = data.artists.artist;
-                let filteredArtists = artists.filter(item => { if(!item.name.includes('/')){return true}})
-                data.artists = filteredArtists;
+                let filteredArtists = artists.filter(item => { 
+                  if(!item.name.includes('/')){
+                    return true
+                  }
+                  
+                })
+               // data.artists = filteredArtists;
                 resolve(data);
               } 
             });    
