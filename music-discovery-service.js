@@ -87,7 +87,7 @@ cloudinary.config(cmgConfig);
 	  defaultParams: { 
 	      country: 'GB', 
         shopId: context.secrets.seven_digital_shop_id,
-	      usageTypes: 'adsupportedstreaming',  
+	      usageTypes: 'adsupportedstreaming,download',  
 	      pageSize: pageSize, 
 	      page:page, 
 	      imageSize:800,
