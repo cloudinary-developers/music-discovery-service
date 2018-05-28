@@ -363,8 +363,10 @@ var browse = function(letter) {
                reject(err)
               }
               if(data){
-                console.log(data.artists.artist[0]);
-                //items.filter(item => { if(!item.name.includes('/')){return true}})
+                
+                var artists = data.artists.artist;
+                let filteredArtists = artists.filter(item => { if(!item.name.includes('/')){return true}})
+                data.artists = filteredArtists;
                 resolve(data);
               } 
             });    
