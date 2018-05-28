@@ -355,6 +355,7 @@ var getClip = function(trackid){
 });
 
  
+ 
 var browse = function(letter) {  
   return new Promise(function (resolve, reject) {
        artists.browse({ letter: letter }, function(err, data) {
@@ -362,6 +363,8 @@ var browse = function(letter) {
                reject(err)
               }
               if(data){
+                console.log(data.artists.artist[0]);
+                //items.filter(item => { if(!item.name.includes('/')){return true}})
                 resolve(data);
               } 
             });    
