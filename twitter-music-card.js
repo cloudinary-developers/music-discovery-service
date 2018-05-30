@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  var sound = "https://canadian-music-week.cloudinary.auth0-extend.com/music-discovery-service/song/21258162/stream";
+  var sound = "https://capitol-music-360.cloudinary.auth0-extend.com/music-discovery-service/song/21258162/stream";
   var poster = "https://res.cloudinary.com/capitol-music-group/image/upload/v1526798279/audio-stream/zedd.png";
   var player = `https://canadian-music-week.cloudinary.auth0-extend.com/twitter-audio-container?poster=${poster}&url=${sound}`;
   var twitterid = "@cloudinary";
@@ -46,7 +46,7 @@ img{
 
 <img src="https://res.cloudinary.com/capitol-music-group/image/upload/v1526798279/audio-stream/zedd.png">
 <audio controls="">
-  <source src="https://canadian-music-week.cloudinary.auth0-extend.com/music-discovery-service/song/21258162/stream" poster="https://res.cloudinary.com/capitol-music-group/image/upload/v1526798279/audio-stream/zedd.png" type="audio/mp3">
+  <source src="https://capitol-music-360.cloudinary.auth0-extend.com/music-discovery-service/song/21258162/stream" poster="https://res.cloudinary.com/capitol-music-group/image/upload/v1526798279/audio-stream/zedd.png" type="audio/mp3">
 Your browser does not support audio
 </audio>
 

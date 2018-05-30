@@ -283,7 +283,7 @@ var oauth = new api.OAuth();
 // /song/70540913/stream/
 
 /*
-https://canadian-music-week.cloudinary.auth0-extend.com/music-discovery-service/song/40349901/stream
+https://capitol-music-360.cloudinary.auth0-extend.com/music-discovery-service/song/40349901/stream
 */
 
 app.get('/song/:trackid/?:stream', function ( req, res) {
@@ -329,7 +329,7 @@ var getClip = function(trackid){
  /*
   "id": "40349901",
         "title": "First Time",
-        https://canadian-music-week.cloudinary.auth0-extend.com/music-discovery-service/clip/40349901/stream
+        https://capitol-music-360.cloudinary.auth0-extend.com/music-discovery-service/clip/40349901/stream
  */
 
  app.get('/clip/:trackid/?:stream', function ( req, res) {
