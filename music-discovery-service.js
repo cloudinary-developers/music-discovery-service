@@ -11,7 +11,7 @@ const md5 = require('md5');
 
 var app = express();
 
-var algorithmia_key,rovi_metasearch_api_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig, clConfig;
+var algorithmia_key,rovi_metasearch_api_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig,cmgSecureConfig, clConfig;
 
 app.use(bodyParser.json());
 
@@ -28,45 +28,43 @@ function genRoviSig(context) {
     return  md5(apikey + secret + utc);
 }
 
+function setCloudinaryConfig(cloudEnv){
+  if(!cloudEnv){
+    return ;
+  }
+  
+let cloud = cloudEnv.split('@')[1];
+let api_key = cloudEnv.split('@')[0].split('//')[1].split(':')[0];
+let api_secret = cloudEnv.split('@')[0].split('//')[1].split(':')[1];
+
+return {
+      "cloud_name": cloud,
+      "api_key": api_key,
+      "api_secret": api_secret
+    }
+}
+
 // Our Middleware to setup API 
 var apiContext = function (req, res, next) {
   const context = req.webtaskContext;
 
+// Set cloudinary configs  
+// Your cloudinary account
+clConfig = setCloudinaryConfig(context.secrets.CLOUDINARY_URL);
 
-
-var cmg_cloudEnv = context.secrets.cmg_cloud;
-
-let cmgcloud = cmg_cloudEnv.split('@')[1];
-let cmg_api = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[0];
-let cmg_secret = cmg_cloudEnv.split('@')[0].split('//')[1].split(':')[1];
-
- // config CMG cloudinary  
-  
-cmgConfig = {
-      "cloud_name": cmgcloud,
-      "api_key": cmg_api,
-      "api_secret": cmg_secret
-    }
-
-clConfig = {
-      "cloud_name": context.secrets.cloudinary_cloud_name,
-      "api_key": context.secrets.cloudinary_api_key,
-      "api_secret": context.secrets.cloudinary_api_secret
-    };
+// CMG public and private clouds
+cmgConfig = setCloudinaryConfig(context.secrets.CMG_CLOUDINARY_URL);
+cmgSecureConfig = setCloudinaryConfig(context.secrets.CMG_CLOUDINARY_SECURE_URL);
     
+// Use your cloudinary account:   
 cloudinary.config(cmgConfig);
 
-
-  // config cloudinary  
-  cloudinary.config();
   // paging 
   const page = context.query.page || 1;
   const pageSize = context.query.pageSize || 100;
   
   //roviSignature 
   roviSignature = genRoviSig(context);
-  // console.log('Rovi Sig: ',roviSignature);
-  // console.log('Rovi rovi_metasearch_api_key: ',rovi_metasearch_api_key);
   
   
   //Algorithmia key
