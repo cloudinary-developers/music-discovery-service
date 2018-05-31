@@ -154,7 +154,32 @@ async function getMetaSeq(params){
     let album = await axios.get(albumInfoURL, albumInfoOptions)
     console.log('Album ', album.data.album);
     
-      let results =  {meta:meta.data.song, album: album.data.album }
+    let nameid = ( meta.data.song) ? meta.data.song.primaryArtists[0].id : null;
+  
+          let artistInfoURL = "http://api.rovicorp.com/data/v1.1/name/info"
+          let artistInfoOptions = {
+            validateStatus: function (status) { return status < 500;},
+                  params: {
+                    nameid: nameid,
+                    include:"images",
+                    country:"us",
+                    language:"en",
+                    formatid:"62",
+                    format:"json",
+                    apikey: authenticated_secrets.rovi_metasearch_api_key,
+                    sig:roviSignature
+                    }};
+       
+      
+      
+  let artist = await axios.get(artistInfoURL, artistInfoOptions)
+  
+  console.log(artist.data.name);
+  
+    
+    
+    
+      let results =  {meta:meta.data.song, album: album.data.album , artist: artist.data.name}
     
             return await results;
   
