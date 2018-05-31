@@ -47,6 +47,14 @@ return {
 // Our Middleware to setup API 
 
 var authenticate = function (req, res, next) {
+    const context = req.webtaskContext;
+    authenticated_secrets = context.secrets;
+    next();
+}
+
+var authenticate_old = function (req, res, next) {
+  
+  
   
            // console.error('module error', err.stack)
          //  res.status(400).send(err)
