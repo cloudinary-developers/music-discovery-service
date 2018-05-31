@@ -118,9 +118,36 @@ cloudinary.config(cmgConfig);
 app.use(apiContext)
 
 
-
-
 async function getMetaSeq(params){
+  try{
+ 
+   let songInfoURL = "http://api.rovicorp.com/data/v1.1/song/info"
+   let songInfoOptions = {
+          validateStatus: function (status) { return status < 500;},
+          params: {
+            isrcid: params.isrc,
+            include:"moods,themes,review,appearances",
+            country:"us",
+            language:"en",
+            format:"json",
+            apikey: authenticated_secrets.rovi_metasearch_api_key,
+            sig:roviSignature
+            }};
+   
+  let meta = await axios.get(songInfoURL, songInfoOptions)
+     console.log("meta", meta); 
+            return await meta;
+  
+  }
+   catch (error){
+    console.log("ERROR", error); 
+    return await error;
+  }     
+  
+  
+}
+
+async function getMetaSeq_broken(params){
 try{
  
    let songInfoURL = "http://api.rovicorp.com/data/v1.1/song/info"
@@ -138,7 +165,7 @@ try{
    
   let meta = await axios.get(songInfoURL, songInfoOptions)
   
-  return await meta;
+  
   
   //Mandatory field: amgpopid or album or amgclassicalid or albumid.
   let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
