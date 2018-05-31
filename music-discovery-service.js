@@ -136,8 +136,13 @@ try{
             sig:roviSignature
             }};
    
-   
-            
+          axios.get(songInfoURL, songInfoOptions)
+          .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
              
   // let meta = await axios.get(songInfoURL, songInfoOptions)
   
