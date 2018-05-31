@@ -52,37 +52,6 @@ var authenticate = function (req, res, next) {
     next();
 }
 
-var authenticate_old = function (req, res, next) {
-  
-  
-  
-           // console.error('module error', err.stack)
-         //  res.status(400).send(err)
-            
-  const context = req.webtaskContext;
-  // req.query.main_api_key
-
-console.log('headers:', context.headers.main_api_key)
-
-  let url = context.secrets.MAIN_API_URL; 
-  
-    axios.get(url, { params: {
-      apikey:  context.secrets.MAIN_API_KEY 
-          } 
-    })
-     .then(function(results){
-       authenticated_secrets = results.data;
-       console.log('authentication success');
-       next();
-     }).catch(function(error){
-       console.log('an error: ' , error.details)
-          //  res.status(400).send(error)
-           // done();
-           next();
-     })
-     
-};
-
 app.use(authenticate)
 
 var apiContext = function (req, res, next) {
