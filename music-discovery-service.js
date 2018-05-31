@@ -135,8 +135,8 @@ async function getMetaSeq(params){
             }};
    
   let meta = await axios.get(songInfoURL, songInfoOptions)
-     console.log("meta", meta); 
-            return await meta;
+     console.log("meta", meta.data); 
+            return await meta.data;
   
   }
    catch (error){
