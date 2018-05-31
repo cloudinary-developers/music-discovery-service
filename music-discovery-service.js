@@ -12,7 +12,7 @@ const md5 = require('md5');
 
 var app = express();
 
-var algorithmia_key,rovi_metasearch_api_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig,cmgSecureConfig, clConfig, authenticated_secrets;
+var algorithmia_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig,cmgSecureConfig, clConfig, authenticated_secrets;
 
 app.use(bodyParser.json());
 
@@ -22,7 +22,7 @@ function genRoviSig(authenticated_secrets) {
     var apikey = authenticated_secrets.rovi_metasearch_api_key;
     var secret = authenticated_secrets.rovi_metasearch_api_secret;
     // console.log(apikey,secret);
-    rovi_metasearch_api_key = apikey;
+  //  rovi_metasearch_api_key = apikey;
     var curdate = new Date();
     var gmtstring = curdate.toGMTString();
     var utc = Date.parse(gmtstring) / 1000;
@@ -132,7 +132,7 @@ try{
             country:"us",
             language:"en",
             format:"json",
-            apikey: rovi_metasearch_api_key,
+            apikey: authenticated_secrets.rovi_metasearch_api_key,
             sig:roviSignature
             }};
             
