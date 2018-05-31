@@ -136,7 +136,27 @@ async function getMetaSeq(params){
    
   let meta = await axios.get(songInfoURL, songInfoOptions)
      console.log("meta", meta.data); 
-            return await meta.data;
+     
+  //Mandatory field: amgpopid or album or amgclassicalid or albumid.
+  let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
+  let albumInfoOptions = {
+          validateStatus: function (status) { return status < 500;},
+          params: {
+            album: meta.data.song.appearances[0].ids.albumId,
+            include:"moods,themes,images,primaryreview,styles,themes,credits",
+            country:"us",
+            language:"en",
+            format:"json",
+            apikey: rovi_metasearch_api_key,
+            sig:roviSignature
+            }};
+             
+    let album = await axios.get(albumInfoURL, albumInfoOptions)
+    console.log('Album ', album.data.album);
+    
+      let results =  {meta:meta.data.song, album: album.data.album }
+    
+            return await results;
   
   }
    catch (error){
