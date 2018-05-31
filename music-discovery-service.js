@@ -147,7 +147,7 @@ async function getMetaSeq(params){
             country:"us",
             language:"en",
             format:"json",
-            apikey: rovi_metasearch_api_key,
+            apikey: authenticated_secrets.rovi_metasearch_api_key,
             sig:roviSignature
             }};
              
