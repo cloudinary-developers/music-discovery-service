@@ -49,6 +49,8 @@ return {
 var authenticate = function (req, res, next) {
     const context = req.webtaskContext;
     authenticated_secrets = context.secrets;
+    
+    console.log(authenticated_secrets);
     next();
 }
 
