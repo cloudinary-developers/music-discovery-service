@@ -135,11 +135,13 @@ try{
             apikey: authenticated_secrets.rovi_metasearch_api_key,
             sig:roviSignature
             }};
+   
+   
             
              
-  let meta = await axios.get(songInfoURL, songInfoOptions)
+  // let meta = await axios.get(songInfoURL, songInfoOptions)
   
-   return await meta;
+  // return await meta;
   
   // //Mandatory field: amgpopid or album or amgclassicalid or albumid.
   // let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
