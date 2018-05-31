@@ -139,57 +139,59 @@ try{
              
   let meta = await axios.get(songInfoURL, songInfoOptions)
   
-  //Mandatory field: amgpopid or album or amgclassicalid or albumid.
-  let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
-  let albumInfoOptions = {
-          validateStatus: function (status) { return status < 500;},
-          params: {
-            album: meta.data.song.appearances[0].ids.albumId,
-            include:"moods,themes,images,primaryreview,styles,themes,credits",
-            country:"us",
-            language:"en",
-            format:"json",
-            apikey: rovi_metasearch_api_key,
-            sig:roviSignature
-            }};
+   return await meta;
+  
+  // //Mandatory field: amgpopid or album or amgclassicalid or albumid.
+  // let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
+  // let albumInfoOptions = {
+  //         validateStatus: function (status) { return status < 500;},
+  //         params: {
+  //           album: meta.data.song.appearances[0].ids.albumId,
+  //           include:"moods,themes,images,primaryreview,styles,themes,credits",
+  //           country:"us",
+  //           language:"en",
+  //           format:"json",
+  //           apikey: rovi_metasearch_api_key,
+  //           sig:roviSignature
+  //           }};
 
 
              
-    let album = await axios.get(albumInfoURL, albumInfoOptions)
-    console.log(album.data.album);
+  //   let album = await axios.get(albumInfoURL, albumInfoOptions)
+  //   console.log(album.data.album);
     
-    let nameid = ( meta.data.song) ? meta.data.song.primaryArtists[0].id : null;
+  //   let nameid = ( meta.data.song) ? meta.data.song.primaryArtists[0].id : null;
   
-          let artistInfoURL = "http://api.rovicorp.com/data/v1.1/name/info"
-          let artistInfoOptions = {
-             validateStatus: function (status) { return status < 500;},
-                  params: {
-                    nameid: nameid,
-                    include:"images",
-                    country:"us",
-                    language:"en",
-                    formatid:"62",
-                    format:"json",
-                    apikey: rovi_metasearch_api_key,
-                    sig:roviSignature
-                    }};
+  //         let artistInfoURL = "http://api.rovicorp.com/data/v1.1/name/info"
+  //         let artistInfoOptions = {
+  //           validateStatus: function (status) { return status < 500;},
+  //                 params: {
+  //                   nameid: nameid,
+  //                   include:"images",
+  //                   country:"us",
+  //                   language:"en",
+  //                   formatid:"62",
+  //                   format:"json",
+  //                   apikey: rovi_metasearch_api_key,
+  //                   sig:roviSignature
+  //                   }};
        
       
       
-  let artist = await axios.get(artistInfoURL, artistInfoOptions)
+  // let artist = await axios.get(artistInfoURL, artistInfoOptions)
   
-  //console.log(artist.data.name);
+  // //console.log(artist.data.name);
   
-  // convenience kv
-  //song
-  var moods = ( meta.data.song && meta.data.song.moods) ? meta.data.song.moods.map((value) => value.name):null;
-  var themes = (meta.data.song && meta.data.song.themes) ? meta.data.song.themes.map((value) => value.name):null;
-  var genres = (meta.data.song && meta.data.song.genres) ? meta.data.song.genres.map((value) => value.name):null;
-  //artist
-  var active = (meta.data.name && artist.data.name.active) ? artist.data.name.active: null;
-  var images = (meta.data.name && artist.data.name.images) ? artist.data.name.images: null;
+  // // convenience kv
+  // //song
+  // var moods = ( meta.data.song && meta.data.song.moods) ? meta.data.song.moods.map((value) => value.name):null;
+  // var themes = (meta.data.song && meta.data.song.themes) ? meta.data.song.themes.map((value) => value.name):null;
+  // var genres = (meta.data.song && meta.data.song.genres) ? meta.data.song.genres.map((value) => value.name):null;
+  // //artist
+  // var active = (meta.data.name && artist.data.name.active) ? artist.data.name.active: null;
+  // var images = (meta.data.name && artist.data.name.images) ? artist.data.name.images: null;
             
-  var result = {images:images, isrc:params.isrc,active:active, genres:genres, themes: themes, moods: moods, song:meta.data.song, artist: artist.data.name, album:album.data.album}
+  // var result = {images:images, isrc:params.isrc,active:active, genres:genres, themes: themes, moods: moods, song:meta.data.song, artist: artist.data.name, album:album.data.album}
             //  console.log(result);
               return await result;
   }
