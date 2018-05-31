@@ -8,7 +8,7 @@ const Algorithmia = require('algorithmia');
 const Api7digital = require('7digital-api');
 const axios = require('axios');
 const md5 = require('md5');
-const once = require('express-once');
+
 
 var app = express();
 
