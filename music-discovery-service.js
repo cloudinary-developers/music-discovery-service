@@ -121,7 +121,7 @@ app.use(apiContext)
 
 
 async function getMetaSeq(params){
-try{
+// try{
  
    let songInfoURL = "http://api.rovicorp.com/data/v1.1/song/info"
    let songInfoOptions = {
@@ -200,12 +200,12 @@ try{
             
   // var result = {images:images, isrc:params.isrc,active:active, genres:genres, themes: themes, moods: moods, song:meta.data.song, artist: artist.data.name, album:album.data.album}
             //  console.log(result);
-              return await result;
-  }
-  catch (error){
-    console.log(error); 
-    return await error;
-  }      
+//               return await result;
+//   }
+//   catch (error){
+//     console.log(error); 
+//     return await error;
+//   }      
 }
 
 app.get('/meta/:isrc', function (req, res) {
