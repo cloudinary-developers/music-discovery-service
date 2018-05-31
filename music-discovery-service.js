@@ -8,31 +8,31 @@ const Algorithmia = require('algorithmia');
 const Api7digital = require('7digital-api');
 const axios = require('axios');
 const md5 = require('md5');
+const once = require('express-once');
 
 var app = express();
 
-var algorithmia_key,rovi_metasearch_api_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig,cmgSecureConfig, clConfig;
+var algorithmia_key,rovi_metasearch_api_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig,cmgSecureConfig, clConfig, authenticated_secrets;
 
 app.use(bodyParser.json());
 
 
-//Rovi Signature Utility 
-function genRoviSig(context) {
-    var apikey = context.secrets.rovi_metasearch_api_key;
-    var secret = context.secrets.rovi_metasearch_api_secret;
-    console.log(apikey,secret);
+//Tivo Rovi Signature Utility 
+function genRoviSig(authenticated_secrets) {
+    var apikey = authenticated_secrets.rovi_metasearch_api_key;
+    var secret = authenticated_secrets.rovi_metasearch_api_secret;
+    // console.log(apikey,secret);
     rovi_metasearch_api_key = apikey;
     var curdate = new Date();
     var gmtstring = curdate.toGMTString();
     var utc = Date.parse(gmtstring) / 1000;
     return  md5(apikey + secret + utc);
 }
-
+// Cloudinary Config Utility
 function setCloudinaryConfig(cloudEnv){
   if(!cloudEnv){
     return ;
   }
-  
 let cloud = cloudEnv.split('@')[1];
 let api_key = cloudEnv.split('@')[0].split('//')[1].split(':')[0];
 let api_secret = cloudEnv.split('@')[0].split('//')[1].split(':')[1];
@@ -45,16 +45,50 @@ return {
 }
 
 // Our Middleware to setup API 
+
+var authenticate = function (req, res, next) {
+  
+           // console.error('module error', err.stack)
+         //  res.status(400).send(err)
+            
+  const context = req.webtaskContext;
+  // req.query.main_api_key
+
+console.log('headers:', context.headers.main_api_key)
+
+  let url = context.secrets.MAIN_API_URL; 
+  
+    axios.get(url, { params: {
+      apikey:  context.secrets.MAIN_API_KEY 
+          } 
+    })
+     .then(function(results){
+       authenticated_secrets = results.data;
+       console.log('authentication success');
+       next();
+     }).catch(function(error){
+       console.log('an error: ' , error.details)
+          //  res.status(400).send(error)
+           // done();
+           next();
+     })
+     
+};
+
+app.use(authenticate)
+
 var apiContext = function (req, res, next) {
+   // console.error('apiContext module error', err)
+    // res.status(500).send(err)
   const context = req.webtaskContext;
 
 // Set cloudinary configs  
 // Your cloudinary account
-clConfig = setCloudinaryConfig(context.secrets.CLOUDINARY_URL);
+clConfig = setCloudinaryConfig(authenticated_secrets.CLOUDINARY_URL);
 
 // CMG public and private clouds
-cmgConfig = setCloudinaryConfig(context.secrets.CMG_CLOUDINARY_URL);
-cmgSecureConfig = setCloudinaryConfig(context.secrets.CMG_CLOUDINARY_SECURE_URL);
+cmgConfig = setCloudinaryConfig(authenticated_secrets.CMG_CLOUDINARY_URL);
+cmgSecureConfig = setCloudinaryConfig(authenticated_secrets.CMG_CLOUDINARY_SECURE_URL);
     
 // Use your cloudinary account:   
 cloudinary.config(cmgConfig);
@@ -64,19 +98,19 @@ cloudinary.config(cmgConfig);
   const pageSize = context.query.pageSize || 100;
   
   //roviSignature 
-  roviSignature = genRoviSig(context);
+  roviSignature = genRoviSig(authenticated_secrets);
   
   
   //Algorithmia key
-  algorithmia_key = context.secrets.algorithmia_key;
+  algorithmia_key = authenticated_secrets.algorithmia_key;
   
   
   //Music Match
-  musicmatch_api_key = context.secrets.musicmatch_api_key;
+  musicmatch_api_key = authenticated_secrets.musicmatch_api_key;
   
   // 7digital-api
-  consumerkey = context.secrets.seven_digital_oauth_consumer_key;
-  consumersecret =  context.secrets.seven_digital_oauth_consumer_secret;
+  consumerkey = authenticated_secrets.seven_digital_oauth_consumer_key;
+  consumersecret =  authenticated_secrets.seven_digital_oauth_consumer_secret;
 
   api = Api7digital.configure({
 	  format: 'JSON',
@@ -84,8 +118,8 @@ cloudinary.config(cmgConfig);
 	  consumersecret: consumersecret,
 	  defaultParams: { 
 	      country: 'GB', 
-        shopId: context.secrets.seven_digital_shop_id,
-	      usageTypes: 'adsupportedstreaming,download',  
+        shopId: authenticated_secrets.seven_digital_shop_id,
+	      usageTypes: 'adsupportedstreaming',  //download
 	      pageSize: pageSize, 
 	      page:page, 
 	      imageSize:800,
@@ -124,8 +158,8 @@ try{
             }};
             
              
-    let meta = await axios.get(songInfoURL, songInfoOptions)
-  // console.log(meta.data.song);
+  let meta = await axios.get(songInfoURL, songInfoOptions)
+  
   //Mandatory field: amgpopid or album or amgclassicalid or albumid.
   let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
   let albumInfoOptions = {
@@ -283,7 +317,7 @@ var oauth = new api.OAuth();
 // /song/70540913/stream/
 
 /*
-https://capitol-music-360.cloudinary.auth0-extend.com/music-discovery-service/song/40349901/stream
+https://canadian-music-week.cloudinary.auth0-extend.com/music-discovery-service/song/40349901/stream
 */
 
 app.get('/song/:trackid/?:stream', function ( req, res) {
@@ -329,7 +363,7 @@ var getClip = function(trackid){
  /*
   "id": "40349901",
         "title": "First Time",
-        https://capitol-music-360.cloudinary.auth0-extend.com/music-discovery-service/clip/40349901/stream
+        https://canadian-music-week.cloudinary.auth0-extend.com/music-discovery-service/clip/40349901/stream
  */
 
  app.get('/clip/:trackid/?:stream', function ( req, res) {
