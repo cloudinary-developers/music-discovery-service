@@ -43,6 +43,33 @@ app.use(apiContext)
 
 */
 
+// type: images, video, raw
+function listAndExportRessources(type,version, prefix){
+	let cloudinary = context.cloudinary.secureAccess();
+		cloudinary.v2.api.resources({resource_type:type , max_results:500,type:'authenticated', prefix:prefix,tags:false, context:false },function(error, result){
+		  
+		  if(err) return console.log(err);
+		  
+		  		console.log(`found ${result.resources.length} ${type}`)
+
+		});
+}
+
+
+app.get('/assets/', function (req, res) {
+  
+  
+async function exportLists(){
+	await listAndExportRessources('image','v4','wayne_shorter');
+	await listAndExportRessources('video','v4','wayne_shorter');
+	await listAndExportRessources('raw','v4','wayne_shorter');
+}
+
+exportLists();
+    res.send("Send the response");
+});
+
+
 app.get('/boxscan/:page', function (req, res) {
   const context = req.webtaskContext;
   // Config and Call Method
@@ -61,6 +88,21 @@ app.get('/boxscan/:page', function (req, res) {
 }
   
 });
+
+app.get('/image/authenticated/:public_id', function (req, res) {
+  const context = req.webtaskContext;
+  // Config and Call Method
+  let cloudinary = context.cloudinary.secureAccess();
+  let image = cloudinary.image("assets/wayne_shorter/core/speak_no_evil/gelder_inlay_clone.png", 
+  {sign_url: true, type: "authenticated", 
+  transformation: [
+  {width: 400, crop: "scale"},
+  {effect: "style_transfer", overlay: "authenticated:assets:wayne_shorter:core:speak_no_evil:brush_300dpi"}
+  ]});
+
+  res.send(image);
+});
+
 
 
 app.get('/', function (req, res) {
