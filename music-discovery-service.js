@@ -173,12 +173,21 @@ async function getMetaSeq(params){
       
       
   let artist = await axios.get(artistInfoURL, artistInfoOptions)
-  
   console.log(artist.data.name);
   
+  
+  let lyricFindUrl = 'http://api.lyricfind.com/lyric.do?apikey=14c9a53ff33f0adf99435f207d9c4b2f&territory=US&reqtype=default&output=json&trackid=isrc:USUM71210637'
     
     
-    
+    let lyricInfoOptions = {
+            validateStatus: function (status) { return status < 500;},
+                  params: {
+                    apikey: authenticated_secrets.lyricFind_api_key,
+                    territory:'US',
+                    reqtype: 'default',
+                    output: 'json',
+                    trackid: 'isrc:' +  params.isrc
+                    }};
       let results =  {meta:meta.data.song, album: album.data.album , artist: artist.data.name}
     
             return await results;
