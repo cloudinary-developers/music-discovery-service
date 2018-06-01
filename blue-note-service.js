@@ -92,9 +92,9 @@ app.get('/boxscan/:page', function (req, res) {
 app.get('/image/:transformation/*', function (req, res) {
   const context = req.webtaskContext;
   const transformation = req.params.transformation.split(',');
-  console.log("params 0 = " + req.params[0]);
-  console.log("params 1 = " + req.params[1]);
-  const public_id = req.params[1];
+  // console.log("params 0 = " + req.params[0]);
+  // console.log("params 1 = " + req.params[1]);
+  const public_id = req.params[0];
   console.log(public_id);
   
   let transformations = [];
