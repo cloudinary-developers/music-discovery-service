@@ -109,10 +109,11 @@ app.get('/image/:transformation/*', function (req, res) {
   };
   
   transformation.forEach(function(item){
-    let key = String (item.split('_')[0]);
+    let transform = {};
+    let key = item.split('_')[0];
     let value = item.split('_')[1];
-    let newKey = lookup[key];
-    transformations.push({newKey:value})
+    transform[lookup[key]] = value;
+    transformations.push(transform)
   })
   
   console.log(transformations);
