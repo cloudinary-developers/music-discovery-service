@@ -95,7 +95,6 @@ app.get('/image/:transformation/*', function (req, res) {
   // console.log("params 0 = " + req.params[0]);
   // console.log("params 1 = " + req.params[1]);
   const public_id = req.params[0];
-  console.log(public_id);
   
   let transformations = [];
   
