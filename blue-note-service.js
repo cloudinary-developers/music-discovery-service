@@ -125,7 +125,7 @@ app.get('/image/:transformation/*', function (req, res) {
   let image = cloudinary.image(public_id, 
   {sign_url: true, type: "authenticated", 
   transformation: transformations});
-
+  console.log(image);
   res.send(image);
 });
 
