@@ -94,7 +94,7 @@ app.get('/image/:tranformation?*', function (req, res) {
   const tranformation = req.params.tranformation;
   // Config and Call Method
   let cloudinary = context.cloudinary.secureAccess();
-  let image = cloudinary.image("assets/wayne_shorter/core/speak_no_evil/gelder_inlay_clone.png", 
+  let image = cloudinary.image(tranformation, 
   {sign_url: true, type: "authenticated", 
   transformation: [
   {width: 400, crop: "scale"},
