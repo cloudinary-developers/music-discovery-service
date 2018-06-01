@@ -115,6 +115,8 @@ app.get('/image/:transformation/*', function (req, res) {
     transformations.push({newKey:value})
   })
   
+  console.log(transformations);
+  
  
   
   // Config and Call Method
