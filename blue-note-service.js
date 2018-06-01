@@ -89,8 +89,9 @@ app.get('/boxscan/:page', function (req, res) {
   
 });
 
-app.get('/image/authenticated/:public_id', function (req, res) {
+app.get('/image/:tranformation?*', function (req, res) {
   const context = req.webtaskContext;
+  const tranformation = req.params.tranformation;
   // Config and Call Method
   let cloudinary = context.cloudinary.secureAccess();
   let image = cloudinary.image("assets/wayne_shorter/core/speak_no_evil/gelder_inlay_clone.png", 
