@@ -97,9 +97,7 @@ app.get('/image/:tranformation?*', function (req, res) {
   let image = cloudinary.image(tranformation, 
   {sign_url: true, type: "authenticated", 
   transformation: [
-  {width: 400, crop: "scale"},
-  {effect: "style_transfer", overlay: "authenticated:assets:wayne_shorter:core:speak_no_evil:brush_300dpi"}
-  ]});
+  {width: 400, crop: "scale"} ]});
 
   res.send(image);
 });
