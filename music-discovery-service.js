@@ -176,7 +176,8 @@ async function getMetaSeq(params){
   console.log(artist.data.name);
   
   
-  let lyricFindUrl = 'http://api.lyricfind.com/lyric.do?apikey=14c9a53ff33f0adf99435f207d9c4b2f&territory=US&reqtype=default&output=json&trackid=isrc:USUM71210637'
+  let lyricFindUrl = 'http://api.lyricfind.com/lyric.do'
+  //?apikey=14c9a53ff33f0adf99435f207d9c4b2f&territory=US&reqtype=default&output=json&trackid=isrc:USUM71210637
     
     
     let lyricInfoOptions = {
