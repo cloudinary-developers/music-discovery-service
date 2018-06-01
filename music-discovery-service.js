@@ -121,66 +121,64 @@ app.use(apiContext)
 async function getMetaSeq(params){
   try{
  
-  // let songInfoURL = "http://api.rovicorp.com/data/v1.1/song/info"
-  // let songInfoOptions = {
-  //         validateStatus: function (status) { return status < 500;},
-  //         params: {
-  //           isrcid: params.isrc,
-  //           include:"moods,themes,review,appearances",
-  //           country:"us",
-  //           language:"en",
-  //           format:"json",
-  //           apikey: authenticated_secrets.rovi_metasearch_api_key,
-  //           sig:roviSignature
-  //           }};
+  let songInfoURL = "http://api.rovicorp.com/data/v1.1/song/info"
+  let songInfoOptions = {
+          validateStatus: function (status) { return status < 500;},
+          params: {
+            isrcid: params.isrc,
+            include:"moods,themes,review,appearances",
+            country:"us",
+            language:"en",
+            format:"json",
+            apikey: authenticated_secrets.rovi_metasearch_api_key,
+            sig:roviSignature
+            }};
    
-  // let meta = await axios.get(songInfoURL, songInfoOptions)
-  //   console.log("meta", meta.data); 
+  let meta = await axios.get(songInfoURL, songInfoOptions)
+    console.log("meta", meta.data); 
      
-  // //Mandatory field: amgpopid or album or amgclassicalid or albumid.
-  // let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
-  // let albumInfoOptions = {
-  //         validateStatus: function (status) { return status < 500;},
-  //         params: {
-  //           album: meta.data.song.appearances[0].ids.albumId,
-  //           include:"moods,themes,images,primaryreview,styles,themes,credits",
-  //           country:"us",
-  //           language:"en",
-  //           format:"json",
-  //           apikey: authenticated_secrets.rovi_metasearch_api_key,
-  //           sig:roviSignature
-  //           }};
+  //Mandatory field: amgpopid or album or amgclassicalid or albumid.
+  let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
+  let albumInfoOptions = {
+          validateStatus: function (status) { return status < 500;},
+          params: {
+            album: meta.data.song.appearances[0].ids.albumId,
+            include:"moods,themes,images,primaryreview,styles,themes,credits",
+            country:"us",
+            language:"en",
+            format:"json",
+            apikey: authenticated_secrets.rovi_metasearch_api_key,
+            sig:roviSignature
+            }};
              
-  //   let album = await axios.get(albumInfoURL, albumInfoOptions)
-  //   console.log('Album ', album.data.album);
+    let album = await axios.get(albumInfoURL, albumInfoOptions)
+    console.log('Album ', album.data.album);
     
-  //   let nameid = ( meta.data.song) ? meta.data.song.primaryArtists[0].id : null;
+    let nameid = ( meta.data.song) ? meta.data.song.primaryArtists[0].id : null;
   
-  //         let artistInfoURL = "http://api.rovicorp.com/data/v1.1/name/info"
-  //         let artistInfoOptions = {
-  //           validateStatus: function (status) { return status < 500;},
-  //                 params: {
-  //                   nameid: nameid,
-  //                   include:"images",
-  //                   country:"us",
-  //                   language:"en",
-  //                   formatid:"62",
-  //                   format:"json",
-  //                   apikey: authenticated_secrets.rovi_metasearch_api_key,
-  //                   sig:roviSignature
-  //                   }};
+          let artistInfoURL = "http://api.rovicorp.com/data/v1.1/name/info"
+          let artistInfoOptions = {
+            validateStatus: function (status) { return status < 500;},
+                  params: {
+                    nameid: nameid,
+                    include:"images",
+                    country:"us",
+                    language:"en",
+                    formatid:"62",
+                    format:"json",
+                    apikey: authenticated_secrets.rovi_metasearch_api_key,
+                    sig:roviSignature
+                    }};
        
       
       
-  // let artist = await axios.get(artistInfoURL, artistInfoOptions)
-  // console.log(artist.data.name);
+  let artist = await axios.get(artistInfoURL, artistInfoOptions)
+  console.log(artist.data.name);
   
   
   let lyricFindUrl = 'http://api.lyricfind.com/lyric.do'
-  //?apikey=14c9a53ff33f0adf99435f207d9c4b2f&territory=US&reqtype=default&output=json&trackid=isrc:USUM71210637
-    
-    
-    let lyricInfoOptions = {
+
+  let lyricInfoOptions = {
             // validateStatus: function (status) { return status < 500;},
                   params: {
                     apikey: authenticated_secrets.LyricFind_api_key,
