@@ -202,7 +202,7 @@ async function getMetaSeq(params){
       var images = (meta.data.name && artist.data.name.images) ? artist.data.name.images: null;
                       
                     
-     let results =  {lyrics: lyricMeta,  meta:meta.data.song, album: album.data.album , artist: artist.data.name}
+     let results =  {moods: moods, themes: themes, genres, lyrics: lyricMeta,  meta:meta.data.song, album: album.data.album , artist: artist.data.name}
     
     
     
