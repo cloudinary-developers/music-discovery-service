@@ -199,7 +199,7 @@ async function getMetaSeq(params){
                     
       // let results =  {lyrics: lyricMeta,  meta:meta.data.song, album: album.data.album , artist: artist.data.name}
     
-            return await (lyrics.data.track);
+            return await (lyricMeta);
   
   }
    catch (error){
