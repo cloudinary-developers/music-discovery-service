@@ -72,14 +72,12 @@ exportLists();
 
 app.get('/boxscan/:page', function (req, res) {
   const context = req.webtaskContext;
-  let public_id = "assets/wayne_shorter/core/odyssey_of_iska/LA_0016328_odyssey8tr"
-
-'
+  const public_id = "assets/wayne_shorter/core/odyssey_of_iska/LA_0016328_odyssey8tr";
   // Config and Call Method
   let cloudinary = context.cloudinary.secureAccess();
   let page = req.params.page || 1;
   try{
-  let image = cloudinary.image("assets/amy_winehouse/core/130751_LA_0011665_000_500_001", 
+  let image = cloudinary.image(public_id, 
   {sign_url: true, type: "authenticated", 
   transformation: [
     {width: 800, page: page, crop: "scale"}
