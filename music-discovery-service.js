@@ -120,7 +120,7 @@ app.use(apiContext)
 
 async function getMetaSeq(params){
   try{
- 
+ /*
    let songInfoURL = "http://api.rovicorp.com/data/v1.1/song/info"
    let songInfoOptions = {
           validateStatus: function (status) { return status < 500;},
@@ -174,7 +174,7 @@ async function getMetaSeq(params){
       
   let artist = await axios.get(artistInfoURL, artistInfoOptions)
   console.log(artist.data.name);
-  
+  /*
   
   let lyricFindUrl = 'http://api.lyricfind.com/lyric.do'
   //?apikey=14c9a53ff33f0adf99435f207d9c4b2f&territory=US&reqtype=default&output=json&trackid=isrc:USUM71210637
