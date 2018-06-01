@@ -89,9 +89,10 @@ app.get('/boxscan/:page', function (req, res) {
   
 });
 
-app.get('/image/*', function (req, res) {
+app.get('/image/*/*', function (req, res) {
   const context = req.webtaskContext;
   const public_id = req.params[0];
+  const test = req.params[1];
   console.log(public_id);
   // Config and Call Method
   let cloudinary = context.cloudinary.secureAccess();
