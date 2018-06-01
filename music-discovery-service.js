@@ -189,13 +189,22 @@ async function getMetaSeq(params){
                     }};
                     
                     
-        let lyrics = await axios.get(lyricFindUrl, lyricInfoOptions)
-        console.log(lyrics.data.track);
+        let lyricsResponse = await axios.get(lyricFindUrl, lyricInfoOptions)
+        console.log(lyricsResponse.data.track);
         
-        let lyricMeta = {lyrics: lyrics.data.track.lyrics, copyright: lyrics.data.track.copyright, writer: lyrics.data.track.writer}
+        let lyricMeta = {lyrics: lyricsResponse.data.track.lyrics, copyright: lyricsResponse.data.track.copyright, writer: lyricsResponse.data.track.writer}
+        
+        var moods = ( meta.data.song && meta.data.song.moods) ? meta.data.song.moods.map((value) => value.name):null;
+        var themes = (meta.data.song && meta.data.song.themes) ? meta.data.song.themes.map((value) => value.name):null;
+        var genres = (meta.data.song && meta.data.song.genres) ? meta.data.song.genres.map((value) => value.name):null;
+  //artist
+      var active = (meta.data.name && artist.data.name.active) ? artist.data.name.active: null;
+      var images = (meta.data.name && artist.data.name.images) ? artist.data.name.images: null;
                       
                     
      let results =  {lyrics: lyricMeta,  meta:meta.data.song, album: album.data.album , artist: artist.data.name}
+    
+    
     
             return await (results);
   
