@@ -179,7 +179,7 @@ async function getMetaSeq(params){
   let lyricFindUrl = 'http://api.lyricfind.com/lyric.do'
 
   let lyricInfoOptions = {
-            // validateStatus: function (status) { return status < 500;},
+             validateStatus: function (status) { return status < 500;},
                   params: {
                     apikey: authenticated_secrets.LyricFind_api_key,
                     territory:'US',
