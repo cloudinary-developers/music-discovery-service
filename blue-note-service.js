@@ -91,10 +91,10 @@ app.get('/boxscan/:page', function (req, res) {
 
 app.get('/image/:tranformation?*', function (req, res) {
   const context = req.webtaskContext;
-  const tranformation = req.params.tranformation;
+  const public_id = req.params.tranformation;
   // Config and Call Method
   let cloudinary = context.cloudinary.secureAccess();
-  let image = cloudinary.image(tranformation, 
+  let image = cloudinary.image(public_id, 
   {sign_url: true, type: "authenticated", 
   transformation: [
   {width: 400, crop: "scale"} ]});
