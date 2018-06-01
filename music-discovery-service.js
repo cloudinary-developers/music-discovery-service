@@ -191,7 +191,7 @@ async function getMetaSeq(params){
                     }};
                     
                     
-        let lyrics = await axios.get(artistInfoURL, artistInfoOptions)
+        let lyrics = await axios.get(lyricFindUrl, lyricInfoOptions)
         console.log(lyrics.track);
                       
                     
