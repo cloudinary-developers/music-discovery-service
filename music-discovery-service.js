@@ -188,7 +188,13 @@ async function getMetaSeq(params){
                     output: 'json',
                     trackid: 'isrc:' +  params.isrc
                     }};
-      let results =  {meta:meta.data.song, album: album.data.album , artist: artist.data.name}
+                    
+                    
+        let lyrics = await axios.get(artistInfoURL, artistInfoOptions)
+        console.log(lyrics.track);
+                      
+                    
+      let results =  {lyrics: lyrics,  meta:meta.data.song, album: album.data.album , artist: artist.data.name}
     
             return await results;
   
