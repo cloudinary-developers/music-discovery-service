@@ -195,9 +195,9 @@ async function getMetaSeq(params){
         console.log(lyrics.data.track);
                       
                     
-      let results =  {lyrics: lyrics.data.track,  meta:meta.data.song, album: album.data.album , artist: artist.data.name}
+      // let results =  {lyrics: lyrics.data.track,  meta:meta.data.song, album: album.data.album , artist: artist.data.name}
     
-            return await results;
+            return await (lyrics.data.track;
   
   }
    catch (error){
