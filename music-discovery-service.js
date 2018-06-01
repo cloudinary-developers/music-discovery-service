@@ -187,7 +187,7 @@ async function getMetaSeq(params){
                     territory:'US',
                     reqtype: 'default',
                     output: 'json',
-                    trackid: 'isrc:' +  params.isrc
+                    trackid: `isrc:${params.isrc}`
                     }};
                     
                     
