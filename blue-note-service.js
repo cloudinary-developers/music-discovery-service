@@ -89,7 +89,7 @@ app.get('/boxscan/:page', function (req, res) {
   
 });
 
-app.get('/image/*:tranformation?', function (req, res) {
+app.get('/image/:*tranformation?', function (req, res) {
   const context = req.webtaskContext;
   const public_id = req.params.tranformation;
   console.log(public_id)
