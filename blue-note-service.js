@@ -97,14 +97,35 @@ app.get('/image/:transformation/*', function (req, res) {
   let transformations = [];
   
   var lookup = {
-    w:"width",
-    h:"height",
-    c:"crop",
-    q:"quality",
-    f:"format",
-    e:"effect",
-    fl:"flag",
-    l:"layer"
+    w: "width",
+    h: "height",
+    c: "crop",
+    q: "quality",
+    f: "format",
+    e: "effect",
+    fl: "flags",
+    l: "overlay",
+    ar: "apect_ratio",
+    g: "gravity",
+    z: "zoom",
+    x: "x",
+    y: "y",
+    r: "radius",
+    a: "angle",
+    o: "opacity",
+    bo: "border",
+    b: "background",
+    u: "underlay",
+    d: "default_image",
+    dl: "delay",
+    co: "color",
+    cs: "color_space",
+    dpr: "dpr",
+    pg: "page",
+    dn: "density",
+    t: "transformation",
+    $: "variable"
+    
   };
   
   transformation.forEach(function(item){
