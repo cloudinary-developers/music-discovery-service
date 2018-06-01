@@ -76,7 +76,7 @@ app.get('/boxscan/:page', function (req, res) {
   let cloudinary = context.cloudinary.secureAccess();
   let page = req.params.page || 1;
   try{
-  let image = cloudinary.image("assets/wayne_shorter/core/speak_no_evil/130751_LA_0011665_000_500_001", 
+  let image = cloudinary.image("assets/amy_winehouse/core/130751_LA_0011665_000_500_001", 
   {sign_url: true, type: "authenticated", 
   transformation: [
     {width: 800, page: page, crop: "scale"}
@@ -89,10 +89,10 @@ app.get('/boxscan/:page', function (req, res) {
   
 });
 
-app.get('/image/:tranformation', function (req, res) {
+app.get('/image/*', function (req, res) {
   const context = req.webtaskContext;
-  const public_id = req.params.tranformation;
-  console.log(public_id)
+  const public_id = req.params[0];
+  console.log(public_id);
   // Config and Call Method
   let cloudinary = context.cloudinary.secureAccess();
   let image = cloudinary.image(public_id, 
