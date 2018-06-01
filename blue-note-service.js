@@ -91,15 +91,37 @@ app.get('/boxscan/:page', function (req, res) {
 
 app.get('/image/:transformation/*', function (req, res) {
   const context = req.webtaskContext;
-  const test = req.params.transformation;
+  const transformation = req.params.transformation.split(',');
   const public_id = req.params[1];
   console.log(public_id);
+  
+  let transformations = [];
+  
+  var lookup = {
+    w:"width",
+    h:"height",
+    c:"crop",
+    q:"quality",
+    f:"format",
+    e:"effect",
+    fl:"flag",
+    l:"layer"
+  };
+  
+  transformation.forEach(function(item){
+    let key = item.split('_')[0];
+    let value = item.split('_')[1];
+    let newKey = lookup[key];
+    transformations.push({newKey:value})
+  })
+  
+ 
+  
   // Config and Call Method
   let cloudinary = context.cloudinary.secureAccess();
   let image = cloudinary.image(public_id, 
   {sign_url: true, type: "authenticated", 
-  transformation: [
-  {width: 400, crop: "scale"} ]});
+  transformation: transformations});
 
   res.send(image);
 });
