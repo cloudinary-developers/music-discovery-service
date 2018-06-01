@@ -10,7 +10,6 @@ const axios = require('axios');
 const md5 = require('md5');
 
 
-
 var app = express();
 
 var algorithmia_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig,cmgSecureConfig, clConfig, authenticated_secrets;
@@ -186,7 +185,9 @@ async function getMetaSeq(params){
                     territory:'US',
                     reqtype: 'default',
                     output: 'json',
-                    trackid: `isrc:${params.isrc}`
+                    trackid: `isrc:${params.isrc}`,
+                    format: 'lrc',
+                    lrckey: authenticated_secrets.LyricFind_lrc_key
                     }};
                     
                     
