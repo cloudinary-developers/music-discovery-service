@@ -92,6 +92,8 @@ app.get('/boxscan/:page', function (req, res) {
 app.get('/image/:transformation/*', function (req, res) {
   const context = req.webtaskContext;
   const transformation = req.params.transformation.split(',');
+  console.log(req.params[0]);
+  console.log(req.params[1]);
   const public_id = req.params[1];
   console.log(public_id);
   
