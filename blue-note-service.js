@@ -149,15 +149,15 @@ app.get('/image/:transformation/*', function (req, res) {
 });
 
 
-app.get('/song', function (req, res) {
+app.get('/song/:public_id', function (req, res) {
   const context = req.webtaskContext;
   // Config and Call Method
+
   let cloudinary = context.cloudinary.secureAccess();
-  let image = cloudinary.image("assets/wayne_shorter/core/speak_no_evil/gelder_inlay_clone.png", 
+  let url = cloudinary.url(public_id, 
   {sign_url: true, type: "authenticated", 
   transformation: [
   {width: 400, crop: "scale"},
-  {effect: "style_transfer", overlay: "authenticated:assets:wayne_shorter:core:speak_no_evil:brush_300dpi"}
   ]});
 
   res.send(image);
