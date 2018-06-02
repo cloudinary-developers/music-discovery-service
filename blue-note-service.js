@@ -154,7 +154,7 @@ app.get('/song/:public_id/*', function (req, res) {
   // Config and Call Method
 
   let cloudinary = context.cloudinary.secureAccess();
-  let url = cloudinary.url(public_id, 
+  let url = cloudinary.url(req.params.public_id, 
   {sign_url: true, type: "authenticated", 
   transformation: [
   {width: 400, crop: "scale"},
