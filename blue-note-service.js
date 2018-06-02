@@ -50,7 +50,6 @@ function listAndExportRessources(type,version, prefix){
 		cloudinary.v2.api.resources({resource_type:type , max_results:500,type:'authenticated', prefix:prefix,tags:false, context:false },function(error, result){
 		  
 		  if(err) return console.log(err);
-		  
 		  		console.log(`found ${result.resources.length} ${type}`)
 
 		});
