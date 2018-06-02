@@ -152,9 +152,9 @@ app.get('/image/:transformation/*', function (req, res) {
 app.get('/song/:public_id/*', function (req, res) {
   const context = req.webtaskContext;
   // Config and Call Method
-
+  let public_id =  req.params[0];
   let cloudinary = context.cloudinary.secureAccess();
-  let url = cloudinary.url(req.params.public_id, 
+  let url = cloudinary.url(public_id, 
   {sign_url: true, type: "authenticated", 
   transformation: [
   {width: 400, crop: "scale"},
