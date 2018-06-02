@@ -139,8 +139,6 @@ app.get('/image/:transformation/*', function (req, res) {
   
   console.log(transformations);
   
- 
-  
   // Config and Call Method
   let cloudinary = context.cloudinary.secureAccess();
   let image = cloudinary.image(public_id, 
