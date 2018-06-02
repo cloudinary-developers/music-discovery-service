@@ -1,18 +1,26 @@
-var express    = require('express');
-var Webtask    = require('webtask-tools');
-var bodyParser = require('body-parser');
-var cloudinary = require('cloudinary');
-var request = require('request');
+const express    = require('express');
+const Webtask    = require('webtask-tools');
+const bodyParser = require('body-parser');
+const cloudinary = require('cloudinary');
+const request    = require('request');
 
-var app = express();
+const app = express();
 
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
  const context = req.webtaskContext;
 
-  const configure = (URL) => {
-       cloudinary.config(setCloudinaryConfig(URL));
+ const get = (url) => {
+  return {
+        "cloud_name": url.split('@')[1],
+        "api_key": url.split('@')[0].split('//')[1].split(':')[0],
+        "api_secret": url.split('@')[0].split('//')[1].split(':')[1]
+      }
+ }
+
+  const configure = (url) => {
+       cloudinary.config(get(url));
        return cloudinary;
   }
  
@@ -25,80 +33,84 @@ app.use((req, res, next) => {
  next();
 });
 
-
-
-var apiContext = function (req, res, next) {
-  const context = req.webtaskContext;
-
-  // paging 
-  const page = context.query.page || 1;
-  const pageSize = context.query.pageSize || 100;
-  console.log('API Inited.')
-  next()
-}
-
-// Use our API Middleware
-app.use(apiContext)
-
-/*
-
-*/
-
 // type: images, video, raw
-function listAndExportRessources(type,version, prefix){
-	let cloudinary = context.cloudinary.secureAccess();
-		cloudinary.v2.api.resources({resource_type:type , max_results:500,type:'authenticated', prefix:prefix,tags:false, context:false },function(error, result){
-		  
-		  if(err) return console.log(err);
-		  
-		  		console.log(`found ${result.resources.length} ${type}`)
+function listAndExportRessources(type, version, prefix) {
+  const cloudinary = context.cloudinary.secureAccess();
+  const options = {
+    resource_type: type, 
+    max_results: 500,
+    type: 'authenticated', 
+    prefix: prefix,
+    tags: false, 
+    context: false 
+  }
 
-		});
+  cloudinary.v2.api.resources(options, (error, result) => {
+    if(error)
+      return console.log(error);
+
+      console.log(`found ${result.resources.length} ${type}`)
+  });
 }
 
+app.get('/albums', (req, res) => {
+  const context = req.webtaskContext;
+  const cloudinary = context.cloudinary.secureAccess();
 
-app.get('/assets/', function (req, res) {
-  
-  
-async function exportLists(){
-	await listAndExportRessources('image','v4','wayne_shorter');
-	await listAndExportRessources('video','v4','wayne_shorter');
-	await listAndExportRessources('raw','v4','wayne_shorter');
-}
+  const format = result => {
+    return result;
+  };
 
-exportLists();
-    res.send("Send the response");
+  cloudinary.v2.search
+    .expression('access_mode:authenticated', 'resource_type:image', 'context.asset_type:album_artwork')
+    .with_field('context')
+    .with_field('tags')
+    .max_results(10)
+    .execute((error, result) => {
+        if(error) return res.send(error);
+
+        res.send(format(result));
+    });
+});
+
+app.get('/assets', (req, res) => {
+
+  async function exportLists(){
+    await listAndExportRessources('image','v4','wayne_shorter');
+    await listAndExportRessources('video','v4','wayne_shorter');
+    await listAndExportRessources('raw','v4','wayne_shorter');
+  }
+
+  exportLists();
+  res.send("Send the response");
 });
 
 
-app.get('/boxscan/:page', function (req, res) {
+app.get('/boxscan/:page', (req, res) => {
   const context = req.webtaskContext;
+  const cloudinary = context.cloudinary.secureAccess();
   const public_id = "assets/wayne_shorter/core/odyssey_of_iska/LA_0016328_odyssey8tr";
-  // Config and Call Method
-  let cloudinary = context.cloudinary.secureAccess();
-  let page = req.params.page || 1;
-  try{
-  let image = cloudinary.image(public_id, 
-  {sign_url: true, type: "authenticated", 
-  transformation: [
-    {width: 800, page: page, crop: "scale"}
-    ]});
-    res.send(image);
-  }catch(error){
-    console.log('Error: ', error)
-    res.send(error);
-}
-  
+
+    const options = {
+      sign_url: true, 
+      type: "authenticated",
+      transformation: [{
+        width: 800,
+        page: req.params.page || 1,
+        crop: "scale"
+      } ]
+    };
+
+    res.send(cloudinary.image(public_id, options));
 });
 
-app.get('/image/:transformation/*', function (req, res) {
+app.get('/image/:transformation/*', (req, res) => {
   const context = req.webtaskContext;
-  const transformation = req.params.transformation.split(',');
+  const cloudinary = context.cloudinary.secureAccess();
   const public_id = req.params[0];
+  const transformations = [];
   
-  let transformations = [];
-  
-  var lookup = {
+  const lookup = {
     w: "width",
     h: "height",
     c: "crop",
@@ -130,66 +142,60 @@ app.get('/image/:transformation/*', function (req, res) {
     
   };
   
-  transformation.forEach(function(item){
-    let transform = {};
-    let key = item.split('_')[0];
-    let value = item.split('_')[1];
-    transform[lookup[key]] = value;
-    transformations.push(transform)
-  })
+  req.params.transformation.split(',')
+    .forEach((item) => {
+      const transform = {};
+      const { key, value } = item.split('_');
+      transform[lookup[key]] = value;
+      transformations.push(transform)
+    });
   
-  console.log(transformations);
-  
-  // Config and Call Method
-  let cloudinary = context.cloudinary.secureAccess();
-  let image = cloudinary.image(public_id, 
-  {sign_url: true, type: "authenticated", 
-  transformation: transformations});
-  console.log(image);
-  res.send(image);
+  const options = {
+    sign_url: true,
+    type: 'authenticated',
+    transformation: transformations
+  };
+
+  res.send(cloudinary.image(public_id, options));
 });
 
 
-app.get('/song/:public_id/*', function (req, res) {
+app.get('/song/:public_id/*', (req, res) => {
   const context = req.webtaskContext;
-  // Config and Call Method
-  let public_id =  req.params[0] || "assets/wayne_shorter/core/soothsayer/05099951437251_S_04_TheSoothsayer_USBN20700919.mp3";
-  let cloudinary = context.cloudinary.secureAccess();
-  let url = cloudinary.v2.url(public_id, { sign_url: true, type: "authenticated", resource_type: "video"})
+  const cloudinary = context.cloudinary.secureAccess();
+  const public_id =  req.params[0] || "assets/wayne_shorter/core/soothsayer/05099951437251_S_04_TheSoothsayer_USBN20700919.mp3";
+  
+  const options = {
+    sign_url: true,
+    type: "authenticated",
+    resource_type: "video"
+  };
+  const url = cloudinary.v2.url(public_id, options)
+
   req.pipe(request(url)).pipe(res);
 });
 
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   const context = req.webtaskContext;
-  // Config and Call Method
-  let cloudinary = context.cloudinary.secureAccess();
-  let image = cloudinary.image("assets/wayne_shorter/core/speak_no_evil/gelder_inlay_clone.png", 
-  {sign_url: true, type: "authenticated", 
-  transformation: [
-  {width: 400, crop: "scale"},
-  {effect: "style_transfer", overlay: "authenticated:assets:wayne_shorter:core:speak_no_evil:brush_300dpi"}
-  ]});
+  const cloudinary = context.cloudinary.secureAccess();
+  const options = {
+    sign_url: true,
+    type: "authenticated",
+    transformation: [
+      {
+        width: 400, 
+        crop: "scale"
+      },
+      {
+        effect: "style_transfer", 
+        overlay: "authenticated:assets:wayne_shorter:core:speak_no_evil:brush_300dpi"
+      }
+    ]
+  };
+  const image = cloudinary.image("assets/wayne_shorter/core/speak_no_evil/gelder_inlay_clone.png", options);
 
   res.send(image);
 });
-
-
-// Cloudinary Config Utility
-function setCloudinaryConfig(cloudEnv){
-  if(!cloudEnv){
-    return ;
-  }
-let cloud = cloudEnv.split('@')[1];
-let api_key = cloudEnv.split('@')[0].split('//')[1].split(':')[0];
-let api_secret = cloudEnv.split('@')[0].split('//')[1].split(':')[1];
-
-return {
-      "cloud_name": cloud,
-      "api_key": api_key,
-      "api_secret": api_secret
-    }
-}
-
 
 module.exports = Webtask.fromExpress(app);
