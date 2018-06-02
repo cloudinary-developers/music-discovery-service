@@ -2,6 +2,7 @@ var express    = require('express');
 var Webtask    = require('webtask-tools');
 var bodyParser = require('body-parser');
 var cloudinary = require('cloudinary');
+var request = require('request');
 
 var app = express();
 
