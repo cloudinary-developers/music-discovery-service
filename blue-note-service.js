@@ -153,6 +153,7 @@ app.get('/image/:transformation/*', function (req, res) {
 app.get('/song/:public_id/*', function (req, res) {
   const context = req.webtaskContext;
   let cloudinary = context.cloudinary.secureAccess();
+  
   // Config and Call Method
   let public_id =  req.params[0] || "assets/wayne_shorter/core/speak_no_evil/00077774650953_SNE_04_SpeakNoEvil_USBN28600071";
 
