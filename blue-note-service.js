@@ -149,7 +149,7 @@ app.get('/image/:transformation/*', function (req, res) {
 });
 
 
-app.get('/song/:public_id', function (req, res) {
+app.get('/song/:public_id/*', function (req, res) {
   const context = req.webtaskContext;
   // Config and Call Method
 
