@@ -160,7 +160,7 @@ app.get('/song/:public_id/*', function (req, res) {
   {width: 400, crop: "scale"},
   ]});
 
-  res.send(image);
+  res.send(url);
 });
 
 
