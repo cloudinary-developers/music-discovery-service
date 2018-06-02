@@ -155,7 +155,9 @@ app.get('/song/:public_id/*', function (req, res) {
   let public_id =  req.params[0] || "assets/wayne_shorter/core/soothsayer/05099951437251_S_04_TheSoothsayer_USBN20700919.mp3";
   let cloudinary = context.cloudinary.secureAccess();
 let url = cloudinary.url(public_id, {sign_url: true, type: "authenticated", resource_type: "video"})
-  res.send(url);
+
+  req.pipe(request(url)).pipe(res);
+  //res.send(url);
 });
 
 
