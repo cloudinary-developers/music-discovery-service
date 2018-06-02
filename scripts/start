@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+echo "start"
+
+nodemon --exec "wt serve blue-note-service.js --secrets-file .env --parse-body --port 8080" &
+nodemon --exec "wt serve music-discovery-service.js --secrets-file .env --port 8081"
