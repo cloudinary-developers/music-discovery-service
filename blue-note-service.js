@@ -158,6 +158,7 @@ app.get('/song/:public_id/*', function (req, res) {
 
   let url = cloudinary.v2.url(public_id, { sign_url: true, type: "authenticated", resource_type: "video"})
   //req.pipe(request(url)).pipe(res);
+  res.send(url);
 });
 
 
