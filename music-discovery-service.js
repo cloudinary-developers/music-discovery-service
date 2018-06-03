@@ -219,6 +219,8 @@ async function getMetaSeq(params){
   
 }
 
+// USMC14673497  
+// 'USCJ81000500'// 'GBAFL1700342'; 
 //USIR10211770
 app.get('/meta/:isrc', function (req, res) {
   var isrc = req.params.isrc  || 'USUM71210637'; 
@@ -240,63 +242,7 @@ app.get('/meta/:isrc', function (req, res) {
 
 /*end */
 
-var getLyrics = function(params){
-  
-  const data = {
-    format:'jsonp',
-    callback: 'callback',
-    q_track: params.q_track,
-    q_artist: params.q_artist,
-    track_isrc: params.track_isrc,
-    apikey: musicmatch_api_key
-  };
-  
-  // musixmatch api
-  const url = 'https://api.musixmatch.com/ws/1.1/matcher.lyrics.get';
-  return new Promise(function (resolve, reject) {
-  
-  JSONP(url,data,'callback',function(response){
-     console.log(response.message.body);
-     const lyrics =  response.message.body.lyrics;
-       if(lyrics){
-         resolve(lyrics);  
-       }else{
-         reject("There was an error getting lyrics");
-       }
-    });
-    
-  });
-  
-}
 
-// USMC14673497  
-// 'USCJ81000500'// 'GBAFL1700342';  //?Spacewoman
-
-app.get('/lyrics/:isrc', function (req, res) {
-  var track_isrc = req.params.isrc  || 'GBAFL1700342'; 
-  const context = req.webtaskContext;
-
-  const data = { track_isrc: track_isrc };
-
-   getLyrics(data)
-   .then(function(lyrics){
-  
-    Algorithmia.client(algorithmia_key)
-    .algo("nlp/AutoTag/1.0.1")
-    .pipe(lyrics.lyrics_body)
-    .then(function(response) {
-        console.log(response.get());
-        var lyrics_body = lyrics.lyrics_body.replace('******* This Lyrics is NOT for Commercial use *******','');
-        var results = { words:response.get(), lyrics: lyrics_body};
-        res.send(results);
-    });
-    
-          
-   })
-   .catch(function(error){
-          res.send(error);
-   });
-});
 
 
 var getSong = function(context, trackid){
