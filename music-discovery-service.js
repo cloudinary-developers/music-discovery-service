@@ -141,9 +141,11 @@ async function getMood(params){
   let moods = await axios.get(moodInfoURL, moodInfoOptions);
   
   let items = moods.data.searchResponse.results.map(item => {
+    let artist = item.song.primaryArtists[0].name || '';
     return {
-      isrc: item.song.ids.isrc, 
+      isrc: item.song.ids.isrcId, 
       title:item.song.title, 
+      artist:artist, 
       sample:item.song.sample};
   });
   
