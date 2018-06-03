@@ -43,10 +43,19 @@ app.get("/assets", (req, res) => {
   const context = req.webtaskContext;
   const cloudinary = context.cloudinary.secureAccess();
 
+  const getsrc = tag => {
+    console.log(tag);
+    return tag.split(' ')[1]
+              .split('=')[1]
+              .replace('\'', '')
+              .replace('\'', '');
+  }
+
   const format = result => {
     console.log(result.resources.length);
     return result.resources.map(r => {
-      return {
+      
+      const asset = {
         public_id: r.public_id,
         folder: r.folder,
         album_title: r.context.album_title,
@@ -59,6 +68,14 @@ app.get("/assets", (req, res) => {
         secure_url: r.secure_url,
         context: r.context
       };
+
+      if(r.resource_type == 'image') {
+        asset.thumbnail = getsrc(cloudinary.image(r.public_id, { width: 100, crop: 'thumb', sign_url: true, type: 'authenticated' }));
+        asset.medium = getsrc(cloudinary.image(r.public_id, { width: 500, crop: 'scale', sign_url: true, type: 'authenticated' }));
+        asset.large = getsrc(cloudinary.image(r.public_id, { width: 1200, crop: 'scale', sign_url: true, type: 'authenticated' }));
+      }
+      
+      return asset;
     });
   };
 
