@@ -75,7 +75,9 @@ app.get("/assets", (req, res) => {
         asset.thumbnail = getsrc(cloudinary.image(r.public_id, { width: 100, crop: 'thumb', sign_url: true, type: 'authenticated' }));
         asset.medium = getsrc(cloudinary.image(r.public_id, { width: 500, crop: 'scale', sign_url: true, type: 'authenticated' }));
         asset.large = getsrc(cloudinary.image(r.public_id, { width: 1200, crop: 'scale', sign_url: true, type: 'authenticated' }));
-         asset.square = getsrc(cloudinary.image(r.public_id, {format:'png', width: 512, height: 512,  crop: 'thumb', sign_url: true, type: 'authenticated' }));
+         asset.square_512 = getsrc(cloudinary.image(r.public_id, {format:'png', width: 512, height: 512,  crop: 'thumb', sign_url: true, type: 'authenticated' }));
+          asset.square_64 = getsrc(cloudinary.image(r.public_id, {format:'png', width: 64, height: 64,  crop: 'thumb', sign_url: true, type: 'authenticated' }));
+           asset.square_256 = getsrc(cloudinary.image(r.public_id, {format:'png', width: 256, height: 256,  crop: 'thumb', sign_url: true, type: 'authenticated' }));
       }
       
       return asset;
