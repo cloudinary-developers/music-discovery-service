@@ -12,7 +12,7 @@ const md5 = require('md5');
 
 var app = express();
 
-var algorithmia_key, roviSignature, musicmatch_api_key,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig,cmgSecureConfig, clConfig, authenticated_secrets;
+var  roviSignature,api, artists, tracks, releases , consumerkey, consumersecret, cmgConfig,cmgSecureConfig, clConfig, authenticated_secrets;
 
 app.use(bodyParser.json());
 
@@ -79,14 +79,7 @@ cloudinary.config(cmgConfig);
   //roviSignature 
   roviSignature = genRoviSig(authenticated_secrets);
   
-  
-  //Algorithmia key
-  algorithmia_key = authenticated_secrets.algorithmia_key;
-  
-  
-  //Music Match
-  musicmatch_api_key = authenticated_secrets.musicmatch_api_key;
-  
+
   // 7digital-api
   consumerkey = authenticated_secrets.seven_digital_oauth_consumer_key;
   consumersecret =  authenticated_secrets.seven_digital_oauth_consumer_secret;
