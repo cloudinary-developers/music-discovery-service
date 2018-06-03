@@ -128,7 +128,7 @@ async function getMetaSeq(params){
             }};
    
   let meta = await axios.get(songInfoURL, songInfoOptions)
-    console.log("meta", meta.data); 
+   // console.log("meta", meta.data); 
      
   //Mandatory field: amgpopid or album or amgclassicalid or albumid.
   let albumInfoURL = "http://api.rovicorp.com/data/v1.1/album/info"
@@ -145,7 +145,7 @@ async function getMetaSeq(params){
             }};
              
     let album = await axios.get(albumInfoURL, albumInfoOptions)
-    console.log('Album ', album.data.album);
+ //   console.log('Album ', album.data.album);
     
     let nameid = ( meta.data.song) ? meta.data.song.primaryArtists[0].id : null;
   
@@ -166,7 +166,7 @@ async function getMetaSeq(params){
       
       
   let artist = await axios.get(artistInfoURL, artistInfoOptions)
-  console.log(artist.data.name);
+ // console.log(artist.data.name);
   
   
   let lyricFindUrl = 'http://api.lyricfind.com/lyric.do'
