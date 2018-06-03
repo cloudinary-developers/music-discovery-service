@@ -148,7 +148,7 @@ async function getMood(params){
   });
   
    console.log("mood", items); 
-    return await (moods.data);
+    return await (items);
   
   }catch (error){
     console.log("ERROR", error); 
