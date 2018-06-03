@@ -161,7 +161,7 @@ async function getMood(params){
 
 app.get('/mood/:genreid/:moodid', function (req, res) {
   
-  let data  = { genreid: req.params.genreid,moodid: req.params.moodid}
+  let data  = { genreid: req.params.genreid, moodid: req.params.moodid}
 
           getMood(data)
           .then(function(meta){
