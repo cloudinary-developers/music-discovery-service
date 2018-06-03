@@ -138,8 +138,16 @@ async function getMood(params){
             sig:roviSignature
             }};
    
-  let moods = await axios.get(moodInfoURL, moodInfoOptions)
-   console.log("mood", moods.data); 
+  let moods = await axios.get(moodInfoURL, moodInfoOptions);
+  
+  let items = moods.data.searchResponse.results.map(item => {
+    return {
+      isrc: item.song.ids.isrc, 
+      title:item.song.title, 
+      sample:item.song.sample};
+  });
+  
+   console.log("mood", items); 
     return await (moods.data);
   
   }catch (error){
