@@ -142,8 +142,9 @@ async function getMood(params){
   
   let items = moods.data.searchResponse.results.map(item => {
     let artist = item.song.primaryArtists[0].name || '';
+    let isrc = item.song.ids.isrcId || '';
     return {
-      isrc: item.song.ids.isrcId, 
+      isrc: isrc, 
       title:item.song.title, 
       artist:artist, 
       sample:item.song.sample};
