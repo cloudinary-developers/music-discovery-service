@@ -44,7 +44,9 @@ app.get("/assets", (req, res) => {
   const cloudinary = context.cloudinary.secureAccess();
 
   const getsrc = tag => {
-    console.log(tag);
+    //the cloudinary.url method returned a malformed url for 
+    // secured images, so we are using cloudinary.image and 
+    // parsing the img tag. yeah it's hacky.
     return tag.split(' ')[1]
               .split('=')[1]
               .replace('\'', '')
