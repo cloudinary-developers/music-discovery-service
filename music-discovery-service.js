@@ -110,6 +110,62 @@ cloudinary.config(cmgConfig);
 // Use our API Middleware
 app.use(apiContext)
 
+/*
+
+http://api.rovicorp.com/search/v2.1/music/filterbrowse?
+entitytype=song
+filter=moodid:XA0000000694,genreid:MA0000002816
+rep=1
+size=20
+offset=0
+
+*/
+
+async function getMood(params){
+  try{
+ 
+  let moodInfoURL = "http://api.rovicorp.com/search/v2.1/music/filterbrowse"
+  let moodInfoOptions = {
+          validateStatus: function (status) { return status < 500;},
+          params: {
+            entitytype:'song',
+            facet:'type',
+            filter:`moodid:${params.moodid},genreid:${params.genreid}`,
+            country:"us",
+            language:"en",
+            format:"json",
+            apikey: authenticated_secrets.rovi_metasearch_api_key,
+            sig:roviSignature
+            }};
+   
+  let moods = await axios.get(moodInfoURL, moodInfoOptions)
+   console.log("mood", moods.data); 
+    return await (moods.data);
+  
+  }catch (error){
+    console.log("ERROR", error); 
+    return await error;
+  }    
+}
+
+app.get('/mood/:genreid/:moodid', function (req, res) {
+  
+  let data  = { genreid:'MA0000002816',moodid: 'XA0000000694'}
+
+          getMood(data)
+          .then(function(meta){
+               console.log('success')
+                res.send(meta);
+          })
+          .catch(function(error){
+                  console.log('error')
+                  res.send(error);
+          });
+      
+  
+});
+
+
 
 async function getMetaSeq(params){
   try{
