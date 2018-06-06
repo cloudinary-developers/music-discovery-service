@@ -186,6 +186,7 @@ app.get("/song/:public_id/*", (req, res) => {
     resource_type: "video"
   };
   const url = cloudinary.v2.url(public_id, options);
+  console.log(url); 
 
   req.pipe(request(url)).pipe(res);
 });
